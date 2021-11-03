@@ -24,6 +24,8 @@ class Producer {
     fun req(@PathVariable("msg") msg: String): String {
         //TODO 1: Wait for the response from reply queue
         reqChannel.send(MessageBuilder.withPayload(msg).build())
+        var waitMs = msg.split("-")[1].toLong() * 1000
+        Thread.sleep(waitMs)
         var reply = repChannel.receive()
         return "Your reply is <b>$reply</b> published successfully"
     }

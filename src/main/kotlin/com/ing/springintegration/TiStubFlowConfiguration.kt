@@ -25,6 +25,8 @@ class TiStubFlowConfiguration {
         ).log<String> {
             logger.debug(it.payload)
         }.transform<String, String> {
+            var waitMs = it.split("-")[1].toLong() * 1000
+            Thread.sleep(waitMs)
             it + " successfully consumed"
         }.handle(
             Jms.outboundAdapter(connectionFactory).destination("repq")
