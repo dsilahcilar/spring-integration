@@ -21,6 +21,8 @@ class Producer {
 
     @GetMapping("req/{msg}")
     fun req(@PathVariable("msg") msg: String): String {
+        //TODO 1: Remove this part and use DSL to send message to req queue
+        // dont wait for the response from reply queue
         jmsTemplate.convertAndSend(reqq, msg)
         return "Your message <b>$msg</b> published successfully"
     }
