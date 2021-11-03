@@ -14,6 +14,8 @@ class ConsumerFlowConfiguration {
     companion object{
         private var logger = LoggerFactory.getLogger(ConsumerFlowConfiguration::class.java)
     }
+
+    //TODO 1: test it on multiple instance
     @Bean
     fun reqFlow(connectionFactory: SingleConnectionFactory): IntegrationFlow {
         return IntegrationFlows
