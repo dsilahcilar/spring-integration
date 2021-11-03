@@ -21,25 +21,20 @@ class ConsumerFlowConfiguration {
             .log<String> {
                 logger.debug(it.payload)
             }.handle(
-                Jms.outboundAdapter(
+                Jms.outboundGateway(
                     connectionFactory
-                ).destination("reqq")
-            ).get()
-    }
-
-    @Bean
-    fun repFlow(connectionFactory: SingleConnectionFactory): IntegrationFlow {
-        return IntegrationFlows
-            .from(
-                Jms.messageDrivenChannelAdapter(connectionFactory)
-                    .destination("repq")
-            ).log<String> {
-                logger.debug(it.payload)
-            }.handle {
-                it-> logger.info("I handled with message: $it")
-            }.get()
+                )
+                    .requestDestination("reqq")
+                    .replyDestination("repq")
+                    .correlationKey("JMSCorrelationID")
+                    .receiveTimeout(25000)
+            ).channel(repChannel())
+            .get()
     }
 
     @Bean
     fun reqChannel() = MessageChannels.direct().get()
+
+    @Bean
+    fun repChannel() = MessageChannels.queue().get()
 }
