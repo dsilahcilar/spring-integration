@@ -3,6 +3,7 @@ package com.ing.springintegration
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.integration.core.MessagingTemplate
 import org.springframework.integration.dsl.IntegrationFlow
 import org.springframework.integration.dsl.IntegrationFlows
 import org.springframework.integration.dsl.MessageChannels
@@ -15,11 +16,6 @@ class ConsumerFlowConfiguration {
         private var logger = LoggerFactory.getLogger(ConsumerFlowConfiguration::class.java)
     }
 
-    //TODO 2 : run it and test it for multiple thread
-    // Execute multiple curl request from different tabs
-    // curl localhost/req/req-5
-    // curl localhost/req/req-1
-    // TODO 2 : fix the issue
     @Bean
     fun reqFlow(connectionFactory: SingleConnectionFactory): IntegrationFlow {
         return IntegrationFlows
@@ -34,7 +30,7 @@ class ConsumerFlowConfiguration {
                     .replyDestination("repq")
                     .correlationKey("JMSCorrelationID")
                     .receiveTimeout(25000)
-            ).channel(repChannel())
+            )
             .get()
     }
 
@@ -42,5 +38,5 @@ class ConsumerFlowConfiguration {
     fun reqChannel() = MessageChannels.direct().get()
 
     @Bean
-    fun repChannel() = MessageChannels.queue().get()
+    fun gatewayTemplate() = MessagingTemplate(reqChannel())
 }
