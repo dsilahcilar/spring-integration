@@ -15,10 +15,11 @@ class ConsumerFlowConfiguration {
         private var logger = LoggerFactory.getLogger(ConsumerFlowConfiguration::class.java)
     }
 
-    //TODO: run it and test it for multiple thread
+    //TODO 2 : run it and test it for multiple thread
     // Execute multiple curl request from different tabs
     // curl localhost/req/req-5
     // curl localhost/req/req-1
+    // TODO 2 : fix the issue
     @Bean
     fun reqFlow(connectionFactory: SingleConnectionFactory): IntegrationFlow {
         return IntegrationFlows
