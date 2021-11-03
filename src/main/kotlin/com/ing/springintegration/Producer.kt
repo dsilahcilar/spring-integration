@@ -23,8 +23,7 @@ class Producer {
 
     @GetMapping("req/{msg}")
     fun req(@PathVariable("msg") msg: String): String {
-        //TODO 1: Remove this part and use DSL to send message to req queue
-        // dont wait for the response from reply queue
+        //TODO 1: Wait for the response from reply queue
         reqChannel.send(MessageBuilder.withPayload(msg).build())
         return "Your message <b>$msg</b> published successfully"
     }
